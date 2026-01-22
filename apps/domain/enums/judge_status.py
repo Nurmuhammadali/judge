@@ -1,0 +1,10 @@
+from enum import Enum
+
+
+class JudgeStatus(str, Enum):
+    PENDING = "PENDING"
+    RUNNING = "RUNNING"
+    ACCEPTED = "ACCEPTED"
+    WRONG_ANSWER = "WRONG_ANSWER"
+    RUNTIME_ERROR = "RUNTIME_ERROR"
+    TIME_LIMIT_EXCEEDED = "TIME_LIMIT_EXCEEDED"

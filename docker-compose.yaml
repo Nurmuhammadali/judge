@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: judge_api
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgresql+psycopg2://judge:judge@postgres:5432/judge
+      REDIS_URL: redis://redis:6379/0
+    restart: always
+
+  worker:
+    build: .
+    container_name: judge_worker
+    command: celery -A core.celery_app worker -l info
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgresql+psycopg2://judge:judge@postgres:5432/judge
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  postgres:
+    image: postgres:15
+    container_name: judge_postgres
+    environment:
+      POSTGRES_DB: judge
+      POSTGRES_USER: judge
+      POSTGRES_PASSWORD: judge
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5436:5432"
+    restart: always
+
+  redis:
+    image: redis:7
+    container_name: judge_redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+volumes:
+  postgres_data:
