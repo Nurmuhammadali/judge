@@ -4,6 +4,7 @@ from datetime import datetime
 
 from apps.domain.entities.submission import Submission
 from apps.domain.enums.judge_status import JudgeStatus
+from apps.services import output_compare
 
 
 class JudgeService:
@@ -30,12 +31,30 @@ class JudgeService:
         )
 
         for tc in testcases:
-            result = self.runner.run(
-                source_code=submission.source_code,   # 👈 KOD MANA SHU YERDAN
-                input_data=tc.input_data,
-            )
+            try:
+                result = self.runner.run(
+                    source_code=submission.source_code,   # 👈 KOD MANA SHU YERDAN
+                    input_data=tc.input_data,
+                )
+            except TimeoutError as exc:
+                self.submission_repo.mark_failed(
+                    submission_id,
+                    reason=str(exc),
+                    status=JudgeStatus.TIME_LIMIT_EXCEEDED,
+                )
+                return
+            except Exception as exc:
+                self.submission_repo.mark_failed(
+                    submission_id,
+                    reason=str(exc),
+                    status=JudgeStatus.RUNTIME_ERROR,
+                )
+                return
 
-            is_correct = result.output.strip() == tc.expected_output.strip()
+            is_correct = output_compare.is_equal(
+                result.output,
+                tc.expected_output,
+            )
 
             self.submission_repo.save_result(
                 submission_id=submission_id,

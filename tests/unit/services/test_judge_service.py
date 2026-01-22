@@ -66,7 +66,6 @@ def test_submission_wrong_answer():
                 problem_id=1,
                 input_data="1\n",
                 expected_output="1\n",
-                type=TestCaseType.HIDDEN,
             ),
         ]
     )

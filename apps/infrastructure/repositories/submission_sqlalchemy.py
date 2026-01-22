@@ -118,13 +118,18 @@ class SubmissionSQLAlchemyRepository(SubmissionRepository, JudgeSubmissionReposi
         model.status = JudgeStatus.RUNNING
         self.session.commit()
     
-    def mark_failed(self, submission_id: UUID, reason: str):
+    def mark_failed(
+        self,
+        submission_id: UUID,
+        reason: str,
+        status: JudgeStatus = JudgeStatus.WRONG_ANSWER,
+    ):
         """Mark submission as failed with reason"""
         model = self.session.get(SubmissionModel, submission_id)
         if not model:
             raise ValueError("Submission not found")
         
-        model.status = JudgeStatus.WRONG_ANSWER
+        model.status = status
         model.output = reason
         model.judged_at = datetime.utcnow()
         self.session.commit()
