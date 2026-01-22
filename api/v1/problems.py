@@ -17,6 +17,7 @@ class CreateProblemRequest(BaseModel):
     time_limit_sec: int = 2
     memory_limit_mb: int = 256
 
+
 @router.post("")
 def create_problem(
         payload: CreateProblemRequest,
