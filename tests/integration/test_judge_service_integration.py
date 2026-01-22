@@ -48,7 +48,11 @@ def test_judge_service_accepted(db):
     submission_repo.add(submission)
 
     runner = FakeRunner(outputs=["1\n", "2\n"])
-    service = JudgeService(submission_repo, testcase_repo, runner)
+    service = JudgeService(
+        submission_repo=submission_repo,
+        testcase_repo=testcase_repo,
+        runner=runner,
+    )
 
     service.run_submission(submission.id)
 
@@ -83,7 +87,11 @@ def test_judge_service_wrong_answer(db):
     submission_repo.add(submission)
 
     runner = FakeRunner(outputs=["999\n"])
-    service = JudgeService(submission_repo, testcase_repo, runner)
+    service = JudgeService(
+        submission_repo=submission_repo,
+        testcase_repo=testcase_repo,
+        runner=runner,
+    )
 
     service.run_submission(submission.id)
 

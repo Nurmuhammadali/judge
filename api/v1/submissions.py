@@ -25,10 +25,9 @@ def create_submission(
 ):
     submission = service.create_submission(
         problem_id=payload.problem_id,
-        language=payload.language,
+        language=payload.language.value,
         source_code=payload.source_code,
     )
-    print(submission)
     run_submission_task.delay(str(submission.id))
     return submission
 

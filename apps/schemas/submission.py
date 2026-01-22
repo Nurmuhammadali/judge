@@ -3,11 +3,12 @@ from uuid import UUID
 from datetime import datetime
 
 from apps.domain.enums.judge_status import JudgeStatus
+from apps.domain.enums.language import Language
 
 
 class SubmissionCreate(BaseModel):
     problem_id: int = Field(..., gt=0)
-    language: str = Field(..., min_length=1)
+    language: Language
     source_code: str = Field(..., min_length=1)
 
 
