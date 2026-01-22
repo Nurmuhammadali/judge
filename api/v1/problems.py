@@ -20,8 +20,8 @@ class CreateProblemRequest(BaseModel):
 
 @router.post("")
 def create_problem(
-    payload: CreateProblemRequest,
-    db=Depends(get_db),
+        payload: CreateProblemRequest,
+        db=Depends(get_db),
 ):
     service = ProblemService(ProblemSQLAlchemyRepository(db))
     return service.create_problem(**payload.dict())
