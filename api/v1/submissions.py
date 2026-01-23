@@ -77,6 +77,7 @@ def list_submissions(
             problem_id=sub.problem_id,
             language=sub.language,
             status=sub.status,
+            source_code=sub.source_code,
             execution_time_ms=sub.execution_time_ms,
             created_at=sub.created_at,
             judged_at=sub.judged_at,

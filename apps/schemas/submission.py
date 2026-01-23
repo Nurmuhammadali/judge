@@ -25,6 +25,7 @@ class SubmissionListItem(BaseModel):
     id: UUID
     problem_id: int
     language: str
+    source_code: str
     status: JudgeStatus
     execution_time_ms: int | None = None
     created_at: datetime
